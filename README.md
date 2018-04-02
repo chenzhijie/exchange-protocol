@@ -1,6 +1,6 @@
-Decentralized Ethereum Assets Exchange Protocol
+## Decentralized Ethereum Assets Exchange Protocol
 
-Description
+### Description
 This protocol is use for exchange assets. The exchange process has only three phase: 
 
 1. **Deposit phase:** Buyer and seller deposit their ethereum assets to the contract. Including ether and all the erc20 token. The contract will return a unique exchange id .
@@ -11,12 +11,13 @@ This protocol is use for exchange assets. The exchange process has only three ph
 	
 	**B. They exchange their assets.**
 		
-Install
+### Install
+
 	git clone https://github.com/chenzhijie/exchange-protocol.git
 	truffle compile && truffle migrate --reset
 	truffle console
 	
 	
-To-do
+### To-do
 1. Build user interface web app with this protocol.
 2. Ethereum assets mobile wallet.
