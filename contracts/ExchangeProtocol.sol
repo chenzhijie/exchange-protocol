@@ -59,6 +59,7 @@ contract ExchangeProtocol {
     event Deposit(address sender, uint amount, bytes32 exchangeId);
     event Withdraw(string tag, address receiver, uint amount, bytes32 exchangeId);
     event Log(string tag, address receiver, bytes32 exchangeId, bytes32 toExchangeId);
+    event Debug(string line, string content, address addr);
 
     function () public payable {
         depositEth();
@@ -74,18 +75,17 @@ contract ExchangeProtocol {
         Deposit(msg.sender, msg.value, ex.fromId);
     }
 
-    // @params(_tokenAddr): token contract address
     function depositToken(address _tokenAddr, uint256 _tokenAmount) public returns(bytes32) {
         ERC20 token = ERC20(_tokenAddr);
         require(_tokenAmount > 0 && token.balanceOf(msg.sender) >= _tokenAmount);
-        require(token.approve(this, _tokenAmount));
-        require(token.transferFrom(msg.sender, this, _tokenAmount));
+        uint256 tokenValue = Math.min256(token.balanceOf(msg.sender), token.allowance(msg.sender, this));
+        tokenValue = Math.min256(tokenValue, _tokenAmount);
         // save the exchange 
         Exchange memory ex;
         ex.fromId = genExchangeId();
-        ex.token = Token(_tokenAddr, _tokenAmount);
+        ex.token = Token(_tokenAddr, tokenValue);
         userExchanges[msg.sender].push(ex);
-        Deposit(msg.sender, _tokenAmount, ex.fromId);
+        Deposit(msg.sender, tokenValue, ex.fromId);
         return ex.fromId;
     }
     
